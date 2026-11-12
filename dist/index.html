@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CrownCards: 3D Car Collecting & Crate-Opening Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>*{box-sizing:border-box;-webkit-user-select:none;user-select:none;margin:0;padding:0}body,html{color:#f8fafc;background:#020617;width:100%;height:100%;font-family:Plus Jakarta Sans,sans-serif;overflow:hidden}#webgl-canvas{z-index:1;pointer-events:none;opacity:.85;width:100%;height:100%;display:block;position:absolute;top:0;left:0}#top-hud{z-index:60;justify-content:space-between;align-items:center;display:flex;position:absolute;top:14px;left:20px;right:20px}.hud-chip{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);background:#0f172ae0;border:1px solid #38bdf84d;border-radius:12px;align-items:center;gap:10px;padding:8px 16px;display:flex;box-shadow:0 4px 20px #00000080}.cash-val{color:#4ade80;letter-spacing:.5px;font-family:Rajdhani,sans-serif;font-size:20px;font-weight:800}.rank-val{color:#38bdf8;font-size:13px;font-weight:700}#app-sidebar{-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);z-index:90;background:#0f172af0;border-right:1px solid #ffffff14;flex-direction:column;width:250px;transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;position:fixed;top:0;bottom:0;left:0;box-shadow:10px 0 35px #0009}#app-sidebar.collapsed{transform:translate(-100%)}.sidebar-header{border-bottom:1px solid #ffffff14;justify-content:space-between;align-items:center;padding:20px 22px;display:flex}.sidebar-brand{color:#38bdf8;align-items:center;gap:8px;font-size:20px;font-weight:900;display:flex}.sidebar-menu{flex-direction:column;flex:1;gap:5px;padding:16px 12px;display:flex;overflow-y:auto}.sidebar-menu-label{color:#64748b;text-transform:uppercase;letter-spacing:1px;padding:10px 12px 4px;font-size:10px;font-weight:800}.side-nav-item{color:#cbd5e1;cursor:pointer;text-align:left;background:0 0;border:1px solid #0000;border-radius:10px;align-items:center;gap:12px;width:100%;padding:10px 14px;font-size:13.5px;font-weight:700;transition:all .15s;display:flex}.side-nav-item:hover{color:#38bdf8;background:#38bdf81a;border-color:#38bdf840;transform:translate(3px)}.side-nav-item.active{color:#0f172a;background:linear-gradient(135deg,#38bdf8,#0ea5e9);box-shadow:0 4px 15px #38bdf866}.sidebar-footer{border-top:1px solid #ffffff14;flex-direction:column;gap:8px;padding:16px;display:flex}#sidebar-toggle-btn{color:#f8fafc;cursor:pointer;background:#1e293be6;border:1px solid #ffffff26;border-radius:10px;justify-content:center;align-items:center;width:40px;height:40px;font-size:18px;transition:all .2s;display:flex}#sidebar-toggle-btn:hover{color:#0f172a;background:#38bdf8;border-color:#38bdf8}#top-nav-bar{gap:8px;display:flex}.top-nav-btn{color:#f8fafc;cursor:pointer;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:#1e293be6;border:1px solid #ffffff26;border-radius:10px;align-items:center;gap:6px;padding:8px 16px;font-size:13px;font-weight:700;transition:all .2s cubic-bezier(.4,0,.2,1);display:flex}.top-nav-btn:hover{color:#0f172a;background:#38bdf8;border-color:#38bdf8;transform:translateY(-2px);box-shadow:0 4px 15px #38bdf866}.top-nav-btn.active{color:#0f172a;background:#38bdf8;border-color:#38bdf8}.setting-pill{cursor:pointer;background:#0f172ab3;border:1px solid #ffffff26;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;transition:all .2s}#recent-drops-banner{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);z-index:55;background:#0f172abf;border:1px solid #ffffff14;border-radius:10px;align-items:center;height:38px;padding:0 12px;transition:all .3s;display:flex;position:absolute;top:68px;left:20px;right:20px;overflow:hidden}.ticker-label{color:#38bdf8;letter-spacing:1px;white-space:nowrap;text-transform:uppercase;align-items:center;gap:6px;margin-right:14px;font-size:11px;font-weight:900;display:flex}#recent-drops-track{scrollbar-width:none;white-space:nowrap;gap:16px;display:flex;overflow-x:auto}#recent-drops-track::-webkit-scrollbar{display:none}.drop-pill{background:#1e293bd9;border-radius:6px;align-items:center;gap:8px;padding:3px 10px;font-size:12px;display:flex}#front-page-container{z-index:50;flex-direction:column;padding-bottom:24px;display:flex;position:absolute;inset:114px 20px 16px;overflow-y:auto}.hero-banner{-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);background:linear-gradient(135deg,#1e293be0 0%,#0f172af2 100%);border:1px solid #38bdf840;border-radius:18px;justify-content:space-between;align-items:center;margin-bottom:20px;padding:20px 28px;display:flex;box-shadow:0 10px 30px #0006}.hero-title{letter-spacing:-.5px;background:linear-gradient(90deg,#fff,#93c5fd);-webkit-text-fill-color:transparent;-webkit-background-clip:text;margin-bottom:4px;font-size:26px;font-weight:900}.hero-subtitle{color:#94a3b8;font-size:13px}.hero-stats{gap:16px;display:flex}.hero-stat-card{text-align:right;background:#0f172a99;border:1px solid #ffffff14;border-radius:10px;padding:8px 16px}.packs-grid{grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;margin-bottom:24px;display:grid}.pack-card{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);background:#1e293bd9;border-radius:18px;flex-direction:column;justify-content:space-between;padding:22px;transition:all .25s;display:flex;position:relative;overflow:hidden;box-shadow:0 8px 24px #00000080}.pack-card:hover{transform:translateY(-6px);box-shadow:0 16px 36px #000000b3}.pack-special{animation:2.5s infinite alternate specialGlow;background:linear-gradient(135deg,#1e293be6 0%,#2d1124e6 100%)!important;border:2px solid #ec4899!important}@keyframes specialGlow{0%{box-shadow:0 0 15px #ec48994d}to{box-shadow:0 0 30px #ec489999}}.pack-header{align-items:center;gap:12px;margin-bottom:12px;display:flex}.pack-icon{font-size:40px;line-height:1;animation:3s ease-in-out infinite alternate floatCrate}@keyframes floatCrate{0%{transform:translateY(0)rotate(0)}to{transform:translateY(-6px)rotate(2deg)}}.pack-name{color:#f8fafc;font-size:19px;font-weight:800}.pack-desc{color:#94a3b8;min-height:36px;margin-bottom:14px;font-size:12.5px;line-height:1.4}.odds-container{background:#0f172ab3;border:1px solid #ffffff0f;border-radius:12px;margin-bottom:16px;padding:12px 14px}.odds-title{text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:8px;font-size:10px;font-weight:800}.odds-row{justify-content:space-between;margin-bottom:4px;font-size:11.5px;display:flex}.odds-rarity{font-weight:700}.odds-val{color:#cbd5e1;font-weight:600}.pack-footer{flex-direction:column;gap:8px;display:flex}.pack-price{color:#38bdf8;font-family:Rajdhani,sans-serif;font-size:26px;font-weight:800}.btn-buy-pack{cursor:pointer;color:#0f172a;letter-spacing:.5px;border:none;border-radius:10px;padding:11px;font-size:14px;font-weight:800;transition:all .15s}.btn-buy-pack:hover{filter:brightness(1.15);transform:scale(1.02)}.btn-multi{color:#cbd5e1!important;background:#0f172ad9!important;border:1px solid #ffffff26!important;font-size:12px!important;font-weight:800!important}.btn-multi:hover{color:#0f172a!important;background:#38bdf8!important;border-color:#38bdf8!important}.shaking-crate{animation:.5s infinite shake;display:inline-block}.violent-shaking{animation:.1s infinite violentShake!important}@keyframes violentShake{0%{transform:translate(3px,2px)rotate(2deg)scale(1.08)}25%{transform:translate(-3px,-3px)rotate(-2deg)scale(1.12)}50%{transform:translate(4px,-2px)rotate(3deg)scale(1.16)}75%{transform:translate(-4px,3px)rotate(-3deg)scale(1.18)}to{transform:translate(2px,-3px)rotate(1deg)scale(1.2)}}.crate-explode{animation:.7s ease-out forwards crateExplodeAnim!important}@keyframes crateExplodeAnim{0%{filter:brightness(3)drop-shadow(0 0 50px #fff);opacity:1;transform:scale(1.2)}50%{filter:brightness(6)drop-shadow(0 0 100px #fff);opacity:.9;transform:scale(2.2)}to{filter:blur(20px);opacity:0;transform:scale(3.5)}}@keyframes shake{0%{transform:translate(1px,1px)rotate(0)}10%{transform:translate(-1px,-2px)rotate(-1deg)}20%{transform:translate(-3px)rotate(1deg)}30%{transform:translate(3px,2px)rotate(0)}40%{transform:translate(1px,-1px)rotate(1deg)}50%{transform:translate(-1px,2px)rotate(-1deg)}60%{transform:translate(-3px,1px)rotate(0)}70%{transform:translate(3px,1px)rotate(-1deg)}80%{transform:translate(-1px,-1px)rotate(1deg)}90%{transform:translate(1px,2px)rotate(0)}to{transform:translate(1px,-2px)rotate(-1deg)}}#modal-overlay{-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);z-index:100;background:#020617e0;justify-content:center;align-items:center;width:100%;height:100%;display:none;position:absolute;top:0;left:0}#modal-card{background:#0f172a;border:1px solid #334155;border-radius:22px;flex-direction:column;width:90%;max-width:1080px;max-height:88vh;display:flex;overflow:hidden;box-shadow:0 25px 70px #000000d9}#modal-header{border-bottom:1px solid #1e293b;justify-content:space-between;align-items:center;padding:18px 26px;display:flex}#modal-title{color:#f8fafc;font-size:21px;font-weight:800}#btn-close-modal{color:#94a3b8;cursor:pointer;background:0 0;border:none;font-size:28px;line-height:1;transition:color .2s}#btn-close-modal:hover{color:#ef4444}#modal-body{flex:1;padding:24px;overflow-y:auto}#reveal-screen{z-index:200;width:100%;height:100%;display:none;position:absolute;top:0;left:0}.car-inv-card{background:#1e293bb3;border-radius:16px;flex-direction:column;justify-content:space-between;padding:18px;transition:transform .2s;display:flex;box-shadow:0 6px 20px #0006}.car-inv-card:hover{transform:translateY(-4px)}@keyframes pulse{0%{opacity:.7;transform:scale(1)}to{opacity:.95;transform:scale(1.15)}}@keyframes pulseMythic{0%{filter:blur(40px);transform:scale(.95)}to{filter:blur(65px);transform:scale(1.2)}}@keyframes pulseExclusive{0%{filter:blur(50px);transform:scale(1)rotate(0)}to{filter:blur(80px);transform:scale(1.3)rotate(180deg)}}</style>
+  <script type="module" crossorigin src="/assets/index-BsOLffQw.js"></script>
+</head>
+<body>
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- SLEEK COLLAPSIBLE SIDEBAR -->
+  <aside id="app-sidebar" class="collapsed">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <span>👑</span>
+        <span>CrownCards</span>
+      </div>
+      <button id="btn-close-sidebar" style="background:none; border:none; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</button>
+    </div>
+
+    <div class="sidebar-menu">
+      <div class="sidebar-menu-label">Main Hall</div>
+      <button class="side-nav-item active" data-tab="packs">
+        <span>📦</span> <span>Packs Store</span>
+      </button>
+      <button class="side-nav-item" data-tab="garage">
+        <span>🏎️</span> <span>Garage Inventory</span>
+      </button>
+      <button class="side-nav-item" data-tab="vault">
+        <span>💼</span> <span>Stored Packs Vault</span>
+      </button>
+
+      <div class="sidebar-menu-label">Features & Mini-Games</div>
+      <button class="side-nav-item" data-tab="fusion" style="color:#d8b4fe;">
+        <span>🔮</span> <span>Pack Fusion Chamber</span>
+      </button>
+      <button class="side-nav-item" data-tab="match3" style="color:#fcd34d;">
+        <span>🎰</span> <span>Match & Click 3</span>
+      </button>
+      <button class="side-nav-item" data-tab="tradeup">
+        <span>🔄</span> <span>Trade-Up Contracts</span>
+      </button>
+      <button class="side-nav-item" data-tab="wheel">
+        <span>🎡</span> <span>Daily Crown Wheel</span>
+      </button>
+
+      <div class="sidebar-menu-label">Community & Progression</div>
+      <button class="side-nav-item" data-tab="sets">
+        <span>🏆</span> <span>Car Sets & Badges</span>
+      </button>
+      <button class="side-nav-item" data-tab="missions">
+        <span>🎯</span> <span>Collector Missions</span>
+      </button>
+      <button class="side-nav-item" data-tab="history">
+        <span>📜</span> <span>Unboxing History</span>
+      </button>
+      <button class="side-nav-item" data-tab="marketplace">
+        <span>🏪</span> <span>P2P Marketplace</span>
+      </button>
+      <button class="side-nav-item" data-tab="leaderboard">
+        <span>🏆</span> <span>Top 100 Collectors</span>
+      </button>
+      <button class="side-nav-item" id="side-admin-btn" data-tab="admin" style="display:none; color:#f472b6;">
+        <span>⚡</span> <span>Admin Console</span>
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div style="font-size:11px; color:#64748b; text-align:center;">CrownCards v3.2 &bull; Modern UI</div>
+    </div>
+  </aside>
+
+  <!-- TOP BAR HUD -->
+  <div id="top-hud">
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <!-- Sidebar Trigger Button -->
+      <button id="sidebar-toggle-btn" title="Open Navigation Menu">
+        ☰
+      </button>
+
+      <div style="font-size: 20px; font-weight: 900; letter-spacing: -0.5px; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+        👑 CrownCards
+      </div>
+      <div class="hud-chip">
+        <span style="font-size: 18px;">💰</span>
+        <div>
+          <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Balance</div>
+          <div class="cash-val" id="hud-cash">$25,000</div>
+        </div>
+      </div>
+      <div class="hud-chip">
+        <span style="font-size: 18px;">⭐</span>
+        <div>
+          <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Rank</div>
+          <div class="rank-val" id="hud-rank">Lv.1 - Street Rookie</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN COMPACT PRIMARY TABS & SETTINGS -->
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <div id="top-nav-bar">
+        <button class="top-nav-btn active" data-tab="packs">📦 Store</button>
+        <button class="top-nav-btn" data-tab="garage">🏎️ Garage</button>
+        <button class="top-nav-btn" data-tab="vault">💼 Vault</button>
+        <button class="top-nav-btn" data-tab="fusion" style="color: #d8b4fe; border-color: rgba(168, 85, 247, 0.4);">🔮 Fusion</button>
+        <button class="top-nav-btn" data-tab="match3" style="color: #fcd34d; border-color: rgba(245, 158, 11, 0.4);">🎰 Match 3</button>
+      </div>
+      
+      <!-- Settings toggles -->
+      <button class="setting-pill" id="toggle-fast-open">⚡ Fast: OFF</button>
+      <button class="setting-pill" id="toggle-mute">🔊 Audio</button>
+      <button class="setting-pill" id="btn-cheat-menu" style="color:#facc15;border-color:rgba(250,204,21,0.4);">🎮 Cheats</button>
+
+      <!-- Account Profile Pill -->
+      <div class="hud-chip" style="cursor: pointer; padding: 6px 12px;" id="btn-user-profile" title="Click to view Account / Logout">
+        <span style="font-size: 16px;">👤</span>
+        <div>
+          <div id="hud-username" style="font-size: 13px; font-weight: 800; color: #38bdf8;">User</div>
+          <div id="hud-user-role" style="font-size: 9px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Account</div>
+        </div>
+        <button id="btn-hud-logout" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-weight: 800; cursor: pointer; margin-left: 4px;">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE RECENT DROPS TICKER -->
+  <div id="recent-drops-banner">
+    <div class="ticker-label">🔥 Live Drops:</div>
+    <div id="recent-drops-track"></div>
+  </div>
+
+  <!-- FRONT PAGE: PACKS ON LOGIN -->
+  <div id="front-page-container">
+    <div class="hero-banner">
+      <div>
+        <h1 class="hero-title">Official Car Packs Store</h1>
+        <p class="hero-subtitle">Open transparent odds crates, unbox exotic 3D cars, and build your high-value dream garage.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat-card">
+          <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Cars in Collection</div>
+          <div id="hud-car-count" style="font-size: 20px; font-weight: 800; color: #38bdf8;">1</div>
+        </div>
+        <div class="hero-stat-card">
+          <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Completion</div>
+          <div id="hud-collection-pct" style="font-size: 20px; font-weight: 800; color: #facc15;">0.9%</div>
+        </div>
+        <div class="hero-stat-card">
+          <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Portfolio Value</div>
+          <div id="hud-inv-value" style="font-size: 20px; font-weight: 800; color: #4ade80;">$2,800</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PACKS LIST -->
+    <div class="packs-grid" id="front-packs-grid"></div>
+  </div>
+
+  <!-- MAIN APP MODAL -->
+  <div id="modal-overlay">
+    <div id="modal-card">
+      <div id="modal-header">
+        <h2 id="modal-title">Menu</h2>
+        <button id="btn-close-modal">&times;</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- UNBOXING REVEAL SCREEN -->
+  <div id="reveal-screen"></div>
+
+  <!-- CHEAT MENU OVERLAY -->
+  <div id="cheat-overlay" style="
+    display:none;
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    background:rgba(2,6,23,0.85);backdrop-filter:blur(18px);
+    z-index:9999;align-items:center;justify-content:center;
+  ">
+    <div style="
+      background:#0f172a;border:2px solid #facc15;border-radius:22px;
+      padding:32px;width:420px;max-width:94vw;
+      box-shadow:0 0 60px rgba(250,204,21,0.25);
+    ">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <h2 style="font-size:22px;font-weight:900;color:#facc15;">🎮 Cheat Console</h2>
+        <button id="cheat-close" style="background:none;border:none;color:#94a3b8;font-size:26px;cursor:pointer;line-height:1;">×</button>
+      </div>
+
+      <!-- Custom amount -->
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;">
+          Add Custom Amount
+        </label>
+        <div style="display:flex;gap:8px;">
+          <input id="cheat-custom-input" type="number" value="100000" min="1" max="999999999"
+            style="flex:1;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:10px 14px;color:#f8fafc;font-size:16px;font-weight:700;">
+          <button id="cheat-custom-btn" style="
+            padding:10px 18px;background:#facc15;color:#0f172a;
+            font-weight:900;border:none;border-radius:10px;cursor:pointer;font-size:14px;
+          ">ADD 💰</button>
+        </div>
+      </div>
+
+      <!-- Quick presets -->
+      <div style="margin-bottom:20px;">
+        <label style="font-size:12px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;">
+          Quick Cash Drops
+        </label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <button class="cheat-preset" data-amount="50000"   style="padding:10px;background:rgba(250,204,21,0.12);border:1px solid rgba(250,204,21,0.35);color:#facc15;border-radius:10px;font-weight:800;cursor:pointer;">+$50,000</button>
+          <button class="cheat-preset" data-amount="250000"  style="padding:10px;background:rgba(250,204,21,0.12);border:1px solid rgba(250,204,21,0.35);color:#facc15;border-radius:10px;font-weight:800;cursor:pointer;">+$250,000</button>
+          <button class="cheat-preset" data-amount="1000000" style="padding:10px;background:rgba(250,204,21,0.12);border:1px solid rgba(250,204,21,0.35);color:#facc15;border-radius:10px;font-weight:800;cursor:pointer;">+$1,000,000</button>
+          <button class="cheat-preset" data-amount="10000000" style="padding:10px;background:rgba(250,204,21,0.12);border:1px solid rgba(250,204,21,0.35);color:#facc15;border-radius:10px;font-weight:800;cursor:pointer;">+$10,000,000</button>
+        </div>
+      </div>
+
+      <!-- Other cheats -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button id="cheat-max-xp" style="padding:11px;background:rgba(168,85,247,0.15);border:1px solid #a855f7;color:#d8b4fe;border-radius:10px;font-weight:800;cursor:pointer;">
+          ⭐ Max Rank (Grant 500,000 XP)
+        </button>
+        <button id="cheat-complete-missions" style="padding:11px;background:rgba(34,197,94,0.12);border:1px solid #22c55e;color:#4ade80;border-radius:10px;font-weight:800;cursor:pointer;">
+          🎯 Complete All Missions
+        </button>
+        <button id="cheat-reset" style="padding:11px;background:rgba(239,68,68,0.12);border:1px solid #ef4444;color:#f87171;border-radius:10px;font-weight:800;cursor:pointer;">
+          🗑️ Reset Save (Fresh Start)
+        </button>
+      </div>
+
+      <p style="font-size:11px;color:#475569;text-align:center;margin-top:16px;">All currency is virtual — no real money involved.</p>
+    </div>
+  </div>
+
+  <!-- AUTH MODAL OVERLAY (Login & Register) -->
+  <div id="auth-modal-overlay" style="
+    display: none;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.99));
+    backdrop-filter: blur(25px);
+    z-index: 10000;
+    align-items: center; justify-content: center;
+  ">
+    <div style="
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 24px;
+      padding: 36px 40px;
+      width: 440px; max-width: 90vw;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.15);
+      text-align: center;
+    ">
+      <div style="font-size: 42px; margin-bottom: 8px;">👑</div>
+      <h2 style="font-size: 26px; font-weight: 900; color: #f8fafc; letter-spacing: -0.5px; margin-bottom: 6px;">CrownCards Club</h2>
+      <p style="font-size: 13px; color: #94a3b8; margin-bottom: 24px;">Sign in to your private account to manage your balance, vehicles, and packs.</p>
+
+      <!-- Auth Tab Toggle (Login vs Register) -->
+      <div style="display: flex; background: rgba(30, 41, 59, 0.8); border-radius: 12px; padding: 4px; margin-bottom: 20px;">
+        <button id="tab-btn-login" style="flex: 1; padding: 10px; border-radius: 9px; font-weight: 800; font-size: 13px; border: none; cursor: pointer; background: #38bdf8; color: #0f172a; transition: all 0.2s;">
+          Log In
+        </button>
+        <button id="tab-btn-register" style="flex: 1; padding: 10px; border-radius: 9px; font-weight: 800; font-size: 13px; border: none; cursor: pointer; background: transparent; color: #94a3b8; transition: all 0.2s;">
+          Create Account
+        </button>
+      </div>
+
+      <!-- Auth Error Notification -->
+      <div id="auth-error-msg" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; border-radius: 10px; padding: 10px; color: #f87171; font-size: 12px; font-weight: 700; margin-bottom: 16px; text-align: left;">
+      </div>
+
+      <!-- Form Fields -->
+      <form id="auth-form" onsubmit="return false;" style="text-align: left; display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <label style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Username</label>
+          <input type="text" id="auth-username" required placeholder="Enter username (or 'admin')" autocomplete="username" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 12px 14px; color: #f8fafc; font-size: 14px; font-weight: 600;">
+        </div>
+
+        <div>
+          <label style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Password</label>
+          <input type="password" id="auth-password" required placeholder="Enter password (or 'admin')" autocomplete="current-password" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 12px 14px; color: #f8fafc; font-size: 14px; font-weight: 600;">
+        </div>
+
+        <button type="submit" id="btn-auth-submit" style="margin-top: 8px; width: 100%; padding: 14px; background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #0f172a; font-weight: 900; font-size: 15px; border: none; border-radius: 12px; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);">
+          LOG IN
+        </button>
+      </form>
+
+      <!-- Quick note for tester -->
+      <div style="margin-top: 18px; padding: 10px 14px; background: rgba(56, 189, 248, 0.08); border: 1px dashed rgba(56, 189, 248, 0.3); border-radius: 10px; text-align: left; font-size: 11px; color: #94a3b8; line-height: 1.5;">
+        🔑 <strong>Default Admin Testing Account:</strong><br>
+        Username: <strong style="color: #38bdf8;">admin</strong> &bull; Password: <strong style="color: #38bdf8;">admin</strong>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
