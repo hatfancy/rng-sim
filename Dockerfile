@@ -1,9 +1,9 @@
-FROM node:20-bullseye-slim
+FROM node:20-bookworm-slim
 
 WORKDIR /app
 
-# Install build dependencies for better-sqlite3
-RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
+# Install build dependencies for native modules (better-sqlite3)
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
 RUN npm install
@@ -18,4 +18,3 @@ ENV PORT=3001
 ENV NODE_ENV=production
 
 CMD ["npm", "start"]
-

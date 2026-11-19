@@ -387,7 +387,7 @@ if (fs.existsSync(distPath)) {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`[CrownCards API] Server running on http://localhost:${PORT}`);
+app.listen(Number(PORT), '0.0.0.0', () => {
+  console.log(`[CrownCards API] Server running on port ${PORT}`);
 });
 
